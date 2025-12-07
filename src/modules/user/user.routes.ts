@@ -1,24 +1,34 @@
 import { FastifyInstance, RegisterOptions } from 'fastify'
-import { schemas, createUserSchema, getUsersSchema } from './user.schema.js'
+import { schemasList, createUserSchema, getUsersSchema, getUserSchema, updateUserSchema, deleteUserSchema } from './user.schema.js'
 import type { User } from '@prisma/client'
 
 interface CreateUserBody {
   email: string
   name?: string
+  avatar?: string
+}
+
+interface UpdateUserBody {
+  name?: string
+  avatar?: string
+  active?: boolean
+}
+
+interface UserParams {
+  id: string
 }
 
 export default async function userRoutes(fastify: FastifyInstance, opts: RegisterOptions) {
-  // Register ALL schemas first
-  Object.values(schemas).forEach(schema => fastify.addSchema(schema))
+  // Register all schemas
+  schemasList.forEach(schema => fastify.addSchema(schema))
 
-  // Create user with proper error handling
+  // CREATE - POST /api/users
   fastify.post<{ Body: CreateUserBody }>('/', {
     schema: createUserSchema,
     handler: async (request, reply) => {
       try {
-        const { email, name } = request.body
+        const { email, name, avatar } = request.body
         
-        // Check if email already exists
         const existingUser = await fastify.prisma.user.findUnique({
           where: { email }
         })
@@ -27,40 +37,106 @@ export default async function userRoutes(fastify: FastifyInstance, opts: Registe
           return reply.status(409).send({
             error: 'CONFLICT',
             message: `User with email ${email} already exists`
-          } as any)
+          })
         }
 
         const user = await fastify.prisma.user.create({
-          data: { email, name }
+          data: { email, name, avatar }
         }) as User
         
         return reply.status(201).send(user)
       } catch (error: any) {
-        fastify.log.error(error)
-        
         if (error.code === 'P2002') {
           return reply.status(409).send({
             error: 'CONFLICT',
             message: `User with email ${request.body.email} already exists`
-          } as any)
+          })
         }
-        
+        fastify.log.error(error)
         return reply.status(500).send({
           error: 'INTERNAL_SERVER_ERROR',
           message: 'Something went wrong'
-        } as any)
+        })
       }
     }
   })
 
-  // List users
+  // READ ALL - GET /api/users
   fastify.get('/', {
     schema: getUsersSchema,
     handler: async (request, reply) => {
       const users = await fastify.prisma.user.findMany({
-        select: { id: true, email: true, name: true }
+        select: { id: true, email: true, name: true, avatar: true, active: true }
       })
       return { users }
+    }
+  })
+
+  // READ SINGLE - GET /api/users/:id
+  fastify.get<{ Params: UserParams }>('/:id', {
+    schema: getUserSchema,
+    handler: async (request, reply) => {
+      const { id } = request.params
+      const user = await fastify.prisma.user.findUnique({
+        where: { id },
+        select: { id: true, email: true, name: true, avatar: true, active: true }
+      })
+
+      if (!user) {
+        return reply.status(404).send({
+          error: 'NOT_FOUND',
+          message: `User with id ${id} not found`
+        })
+      }
+
+      return user
+    }
+  })
+
+  // UPDATE - PATCH /api/users/:id
+  fastify.patch<{ Params: UserParams, Body: UpdateUserBody }>('/:id', {
+    schema: updateUserSchema,
+    handler: async (request, reply) => {
+      const { id } = request.params
+      const data = request.body
+
+      const user = await fastify.prisma.user.findUnique({ where: { id } })
+
+      if (!user) {
+        return reply.status(404).send({
+          error: 'NOT_FOUND',
+          message: `User with id ${id} not found`
+        })
+      }
+
+      const updatedUser = await fastify.prisma.user.update({
+        where: { id },
+        data,
+        select: { id: true, email: true, name: true, avatar: true, active: true }
+      }) as User
+
+      return updatedUser
+    }
+  })
+
+  // DELETE - DELETE /api/users/:id
+  fastify.delete<{ Params: UserParams }>('/:id', {
+    schema: deleteUserSchema,
+    handler: async (request, reply) => {
+      const { id } = request.params
+
+      const user = await fastify.prisma.user.findUnique({ where: { id } })
+
+      if (!user) {
+        return reply.status(404).send({
+          error: 'NOT_FOUND',
+          message: `User with id ${id} not found`
+        })
+      }
+
+      await fastify.prisma.user.delete({ where: { id } })
+
+      return reply.status(204).send()
     }
   })
 }
