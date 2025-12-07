@@ -56,8 +56,8 @@ async function start() {
       port: Number(process.env.PORT) || 3000, 
       host: '0.0.0.0' 
     })
-    fastify.log.info(`🚀 StormForge running on http://localhost:${process.env.PORT || 3000}`)
-    fastify.log.info(`📚 Swagger docs: http://localhost:${process.env.PORT || 3000}/docs`)
+    fastify.log.info(`StormForge running on http://localhost:${process.env.PORT || 3000}`)
+    fastify.log.info(`Swagger docs: http://localhost:${process.env.PORT || 3000}/docs`)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

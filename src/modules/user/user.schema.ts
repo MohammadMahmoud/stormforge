@@ -5,8 +5,8 @@ export const schemas = {
     required: ['email'],
     properties: {
       email: { type: 'string', format: 'email' },
-      name: { type: 'string', minLength: 1, maxLength: 100 },
-    },
+      name: { type: 'string', minLength: 1, maxLength: 100 }
+    }
   },
   createUserResponse: {
     $id: 'createUserResponse',
@@ -15,7 +15,9 @@ export const schemas = {
       id: { type: 'string' },
       email: { type: 'string' },
       name: { type: 'string', nullable: true },
-    },
+      createdAt: { type: 'string' },
+      updatedAt: { type: 'string' }
+    }
   },
   getUsersResponse: {
     $id: 'getUsersResponse',
@@ -24,10 +26,10 @@ export const schemas = {
       users: {
         type: 'array',
         items: {
-          $ref: 'user', // Reference to user schema below
-        },
-      },
-    },
+          $ref: 'user'
+        }
+      }
+    }
   },
   user: {
     $id: 'user',
@@ -35,20 +37,26 @@ export const schemas = {
     properties: {
       id: { type: 'string' },
       email: { type: 'string' },
-      name: { type: 'string', nullable: true },
-    },
-  },
-};
+      name: { type: 'string', nullable: true }
+    }
+  }
+}
 
 export const createUserSchema = {
-  body: { $ref: 'createUserBody' },
-  response: {
-    201: { $ref: 'createUserResponse' },
+  body: { 
+    $ref: 'createUserBody' 
   },
-};
+  response: {
+    201: { 
+      $ref: 'createUserResponse' 
+    }
+  }
+}
 
 export const getUsersSchema = {
   response: {
-    200: { $ref: 'getUsersResponse' },
-  },
-};
+    200: { 
+      $ref: 'getUsersResponse' 
+    }
+  }
+}
