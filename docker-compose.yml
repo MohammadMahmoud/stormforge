@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: stormforge-pg
+    environment:
+      POSTGRES_USER: stormforge
+      POSTGRES_PASSWORD: stormforge
+      POSTGRES_DB: stormforge
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stormforge -d stormforge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - stormforge
+
+  app:
+    build: .
+    container_name: stormforge-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://stormforge:stormforge@postgres:5432/stormforge?schema=public
+      - PORT=3000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - stormforge
+    command: npm run dev
+
+volumes:
+  postgres_data:
+
+networks:
+  stormforge:
+    driver: bridge
