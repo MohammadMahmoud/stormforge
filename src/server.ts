@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
@@ -6,8 +5,11 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import dotenv from 'dotenv';
 import Fastify from 'fastify';
+import { fileURLToPath } from 'url';
 import userRoutes from './modules/user/user.routes.js';
 import { prismaPlugin } from './plugins/prisma.js';
+
+const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 
 dotenv.config();
 
@@ -54,11 +56,6 @@ export async function build() {
   return fastify;
 }
 
-// Production startup
-if (require.main === module) {
-  start();
-}
-
 async function start() {
   const fastify = await build();
 
@@ -78,4 +75,8 @@ async function start() {
     await fastify.close();
     process.exit(0);
   });
+}
+
+if (isMain) {
+  start();
 }

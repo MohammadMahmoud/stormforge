@@ -1,4 +1,4 @@
-#  StormForge
+# StormForge
 
 [![GitHub stars](https://img.shields.io/github/stars/MohammadMahmoud/stormforge?style=social)](https://github.com/MohammadMahmoud/stormforge)
 [![GitHub license](https://img.shields.io/github/license/MohammadMahmoud/stormforge)](https://github.com/MohammadMahmoud/stormforge/blob/main/LICENSE)
@@ -10,7 +10,7 @@
 
 **Production-ready REST API framework built with Fastify + TypeScript + Prisma + PostgreSQL.** Scalable, secure, fully Dockerized with automated OpenAPI docs, testing, and CI/CD ready.
 
-##  Features
+## Features
 
 - ⚡ **Fastify** - High-performance Node.js framework (2-3x faster than Express)
 - 🔤 **TypeScript** - Full type safety end-to-end
@@ -22,44 +22,54 @@
 - 📊 **Observability** - Structured logging (Pino), health checks
 - 🎯 **Modular** - Clean architecture ready to scale to microservices
 
-##  Tech Stack
+## Tech Stack
+
 Fastify + TypeScript + Prisma + PostgreSQL + Docker
 ↓
 REST API → Rate Limited → Validated (Ajv) → Persisted → Documented (Swagger)
 
-
-##  Quick Start
+## Quick Start
 
 ### Prerequisites
+
 - Node.js **22+** (`nvm use 22`)
 - Docker & Docker Compose
 - Git
 
 ### 1. Clone & Install
+
 ```shell
 npm install
 ```
+
 ### 2. Start PostgreSQL
+
 ```shell
 docker compose up -d postgres
 ```
+
 ### 3. Database Setup
+
 ```shell
-npx prisma db push 
-npx prisma generate 
+npx prisma db push
+npx prisma generate
 ```
+
 ### 4. Development Server
+
 ```shell
 npm run dev
 ```
+
 **✅ Server ready at `http://localhost:3000` | 📚 Docs at `http://localhost:3000/docs`**
 
 ## 📋 API Endpoints
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/health` | Health check |
-| `GET` | `/api/users` | List users |
-| `POST` | `/api/users` | Create user |
+
+| Method | Endpoint     | Description  |
+| ------ | ------------ | ------------ |
+| `GET`  | `/health`    | Health check |
+| `GET`  | `/api/users` | List users   |
+| `POST` | `/api/users` | Create user  |
 
 **Try it live:**
 Health check
@@ -74,23 +84,30 @@ curl -X POST http://localhost:3000/api/users
 -d '{"email":"test@example.com","name":"John Doe"}'
 
 ## Testing & Quality
+
 ```shell
-npm test 
-npm run test:coverage 
-npm run test:ui 
+npm test
+npm run test:coverage
+npm run test:ui
 npm run lint
 npm run format
 ```
+
 ## Production Deployment
+
 ```shell
-npm run build 
-docker compose up -d 
+npm run build
+docker compose up -d
 ```
+
 OR
+
 ```shell
 npm run docker:prod
 ```
-##  Project Structure
+
+## Project Structure
+
 stormforge/
 ├── src/
 │ ├── server.ts # Entry point
@@ -108,15 +125,16 @@ stormforge/
 ├── Dockerfile # Production build
 └── tests/ # Vitest tests
 
-##  Environment Variables
+## Environment Variables
+
 Copy `.env.example` to `.env`:
 DATABASE_URL="postgresql://stormforge:stormforge@localhost:5432/stormforge?schema=public"
 PORT=3000
 NODE_ENV=development
 LOG_LEVEL=info
 
+## Docker Commands
 
-##  Docker Commands
 ```shell
 npm run db:studio # Prisma Studio (GUI)
 npm run db:migrate # Create migrations
@@ -124,8 +142,7 @@ npm run db:push # Push schema changes
 npm run db:generate # Regenerate client
 ```
 
-
-##  Contributing
+## Contributing
 
 1. Fork the repo
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -133,7 +150,7 @@ npm run db:generate # Regenerate client
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-##  License
+## License
 
 [MIT License](LICENSE) - Free to use in commercial projects.
 
@@ -144,4 +161,4 @@ npm run db:generate # Regenerate client
 
 ---
 
- **Star this repo if you found it useful!** 
+**Star this repo if you found it useful!**

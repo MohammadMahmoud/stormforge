@@ -4,12 +4,12 @@ module.exports = {
   extends: [
     'eslint:recommended',
     '@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking'
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'off'
-  }
-}
+    '@typescript-eslint/explicit-function-return-type': 'off',
+  },
+};

@@ -8,8 +8,8 @@ export const schemas = {
       email: { type: 'string' },
       name: { type: 'string', nullable: true },
       avatar: { type: 'string', nullable: true },
-      active: { type: 'boolean' }
-    }
+      active: { type: 'boolean' },
+    },
   },
 
   // Create user
@@ -20,12 +20,12 @@ export const schemas = {
     properties: {
       email: { type: 'string', format: 'email' },
       name: { type: 'string', minLength: 1, maxLength: 100 },
-      avatar: { type: 'string', format: 'uri', nullable: true }
-    }
+      avatar: { type: 'string', format: 'uri', nullable: true },
+    },
   },
   createUserResponse: {
     $id: 'createUserResponse',
-    allOf: [{ $ref: 'user' }]
+    allOf: [{ $ref: 'user' }],
   },
 
   // Get single user
@@ -33,11 +33,11 @@ export const schemas = {
     $id: 'getUserParams',
     type: 'object',
     required: ['id'],
-    properties: { id: { type: 'string' } }
+    properties: { id: { type: 'string' } },
   },
   getUserResponse: {
     $id: 'getUserResponse',
-    allOf: [{ $ref: 'user' }]
+    allOf: [{ $ref: 'user' }],
   },
 
   // Update user
@@ -45,7 +45,7 @@ export const schemas = {
     $id: 'updateUserParams',
     type: 'object',
     required: ['id'],
-    properties: { id: { type: 'string' } }
+    properties: { id: { type: 'string' } },
   },
   updateUserBody: {
     $id: 'updateUserBody',
@@ -53,8 +53,8 @@ export const schemas = {
     properties: {
       name: { type: 'string', minLength: 1, maxLength: 100 },
       avatar: { type: 'string', format: 'uri' },
-      active: { type: 'boolean' }
-    }
+      active: { type: 'boolean' },
+    },
   },
 
   // Delete user params
@@ -62,7 +62,7 @@ export const schemas = {
     $id: 'deleteUserParams',
     type: 'object',
     required: ['id'],
-    properties: { id: { type: 'string' } }
+    properties: { id: { type: 'string' } },
   },
 
   // List users
@@ -72,34 +72,34 @@ export const schemas = {
     properties: {
       users: {
         type: 'array',
-        items: { $ref: 'user' }
-      }
-    }
-  }
-}
+        items: { $ref: 'user' },
+      },
+    },
+  },
+};
 
-export const schemasList = Object.values(schemas)
+export const schemasList = Object.values(schemas);
 
 export const createUserSchema = {
   body: { $ref: 'createUserBody' },
-  response: { 201: { $ref: 'createUserResponse' } }
-}
+  response: { 201: { $ref: 'createUserResponse' } },
+};
 
 export const getUsersSchema = {
-  response: { 200: { $ref: 'getUsersResponse' } }
-}
+  response: { 200: { $ref: 'getUsersResponse' } },
+};
 
 export const getUserSchema = {
   params: { $ref: 'getUserParams' },
-  response: { 200: { $ref: 'getUserResponse' } }
-}
+  response: { 200: { $ref: 'getUserResponse' } },
+};
 
 export const updateUserSchema = {
   params: { $ref: 'updateUserParams' },
   body: { $ref: 'updateUserBody' },
-  response: { 200: { $ref: 'getUserResponse' } }
-}
+  response: { 200: { $ref: 'getUserResponse' } },
+};
 
 export const deleteUserSchema = {
-  params: { $ref: 'deleteUserParams' }
-}
+  params: { $ref: 'deleteUserParams' },
+};
