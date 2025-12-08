@@ -37,8 +37,6 @@ REST API → Rate Limited → Validated (Ajv) → Persisted → Documented (Swag
 
 ### 1. Clone & Install
 ```shell
-git clone https://github.com/YOUR_USERNAME/my-backend-framework.git
-cd my-backend-framework
 npm install
 ```
 ### 2. Start PostgreSQL
