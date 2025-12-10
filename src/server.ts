@@ -13,7 +13,7 @@ const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 
 dotenv.config();
 
-export async function build() {
+export const build = async () => {
   const fastify = Fastify({
     logger: {
       level: process.env.LOG_LEVEL || 'silent', // Silent in tests
@@ -54,9 +54,9 @@ export async function build() {
   await fastify.register(userRoutes, { prefix: '/api/users' });
 
   return fastify;
-}
+};
 
-async function start() {
+export const start = async () => {
   const fastify = await build();
 
   try {
@@ -75,7 +75,7 @@ async function start() {
     await fastify.close();
     process.exit(0);
   });
-}
+};
 
 if (isMain) {
   start();
