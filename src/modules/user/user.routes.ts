@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client';
-import { FastifyInstance, RegisterOptions } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import {
   createUserSchema,
   deleteUserSchema,
@@ -25,7 +25,7 @@ interface UserParams {
   id: string;
 }
 
-const userRoutes = async (fastify: FastifyInstance, opts: RegisterOptions) => {
+const userRoutes = async (fastify: FastifyInstance) => {
   // Register all schemas
   schemasList.forEach((schema) => fastify.addSchema(schema));
 
@@ -71,7 +71,7 @@ const userRoutes = async (fastify: FastifyInstance, opts: RegisterOptions) => {
   // READ ALL - GET /api/users
   fastify.get('/', {
     schema: getUsersSchema,
-    handler: async (request, reply) => {
+    handler: async () => {
       const users = await fastify.prisma.user.findMany({
         select: { id: true, email: true, name: true, avatar: true, active: true },
       });

@@ -15,7 +15,7 @@
 - ⚡ **Fastify** - High-performance Node.js framework (2-3x faster than Express)
 - 🔤 **TypeScript** - Full type safety end-to-end
 - 🗃️ **Prisma ORM** - Type-safe database client for PostgreSQL
-- 🔒 **Security** - Helmet, CORS, Rate Limiting
+- 🔒 **Security** - Helmet, CORS, Rate Limiting, Ajv JSON Schema Validation
 - 📚 **Swagger/OpenAPI** - Auto-generated interactive API docs
 - 🐳 **Docker** - Development & Production ready containers
 - ✅ **Testing** - Vitest with coverage & UI reporter
@@ -26,7 +26,7 @@
 
 Fastify + TypeScript + Prisma + PostgreSQL + Docker
 ↓
-REST API → Rate Limited → Validated → Persisted → Documented (Swagger)
+REST API → Rate Limited → Validated (Ajv) → Persisted → Documented (Swagger)
 
 ## Quick Start
 
@@ -73,24 +73,15 @@ npm run dev
 
 **Try it live:**
 Health check
-
-```shell
 curl http://localhost:3000/health
-```
 
 List users
-
-```shell
 curl http://localhost:3000/api/users
-```
 
 Create user
-
-```shell
 curl -X POST http://localhost:3000/api/users
 -H "Content-Type: application/json"
 -d '{"email":"test@example.com","name":"John Doe"}'
-```
 
 ## Testing & Quality
 
@@ -117,21 +108,22 @@ npm run docker:prod
 
 ## Project Structure
 
-```text
 stormforge/
 ├── src/
 │ ├── server.ts # Entry point
 │ ├── plugins/
 │ │ └── prisma.ts # Prisma Fastify plugin
 │ ├── modules/
-│ │ ├── user.routes.ts # Routes + Handlers
-│ │ └── user.schema.ts # Validation schemas
-├── plugins/
-│ └── prisma # Database models
+│ │ └── user/ # Feature modules (scalable!)
+│ │ ├── routes.ts # Routes + Handlers
+│ │ └── schema.ts # Ajv validation schemas
+│ ├── config/ # Configuration
+│ └── utils/ # Shared utilities
+├── prisma/
+│ └── schema.prisma # Database models
 ├── docker-compose.yml # Postgres + App
 ├── Dockerfile # Production build
 └── tests/ # Vitest tests
-```
 
 ## Environment Variables
 
