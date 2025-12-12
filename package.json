@@ -39,7 +39,9 @@
     "@vitest/ui": "4.0.15",
     "eslint": "^9.39.1",
     "happy-dom": "^20.0.11",
+    "husky": "^9.1.7",
     "jsdom": "^27.2.0",
+    "lint-staged": "^16.2.7",
     "prettier": "3.7.4",
     "ts-node": "^10.9.2",
     "tsx": "4.21.0",
@@ -67,7 +69,7 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "test:watch": "vitest --watch"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "test:watch": "vitest --watch",
+    "prepare": "husky"
+  }
 }

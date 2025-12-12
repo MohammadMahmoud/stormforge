@@ -1,36 +1,40 @@
+import Fastify from 'fastify';
 import compress from '@fastify/compress';
 import cors from '@fastify/cors';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
 import helmet from '@fastify/helmet';
+import { prismaPlugin } from './plugins/prisma.js';
 import rateLimit from '@fastify/rate-limit';
 import sensible from '@fastify/sensible';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import dotenv from 'dotenv';
-import Fastify from 'fastify';
-import { fileURLToPath } from 'url';
 import userRoutes from './modules/user/user.routes.js';
-import { prismaPlugin } from './plugins/prisma.js';
 
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+const isTest =
+  process.env.NODE_ENV === 'test' ||
+  process.env.VITEST !== undefined ||
+  process.env.TEST !== undefined;
 
 dotenv.config();
 
-export async function build() {
+export const build = async () => {
   const fastify = Fastify({
-    logger: {
-      level: process.env.LOG_LEVEL || (process.env.NODE_ENV === 'development' ? 'info' : 'warn'),
-      transport:
-        process.env.NODE_ENV === 'development'
-          ? {
-              target: 'pino-pretty',
-              options: {
-                colorize: true,
-                translateTime: 'SYS:standard',
-                ignore: 'pid,hostname',
-              },
-            }
-          : undefined,
-    },
+    logger: isTest
+      ? false
+      : {
+          level:
+            process.env.LOG_LEVEL || (process.env.NODE_ENV === 'development' ? 'info' : 'warn'),
+          transport: {
+            target: 'pino-pretty',
+            options: {
+              colorize: true,
+              translateTime: 'SYS:standard',
+              ignore: 'pid,hostname',
+            },
+          },
+        },
     disableRequestLogging: process.env.NODE_ENV === 'production',
   });
 
@@ -108,10 +112,10 @@ export async function build() {
   await fastify.register(userRoutes, { prefix: '/api/users' });
 
   return fastify;
-}
+};
 
 // Graceful shutdown setup
-function setupGracefulShutdown(fastify: Fastify.FastifyInstance) {
+const setupGracefulShutdown = (fastify: Fastify.FastifyInstance) => {
   const signals = ['SIGTERM', 'SIGINT'];
 
   signals.forEach((signal) => {
@@ -127,9 +131,9 @@ function setupGracefulShutdown(fastify: Fastify.FastifyInstance) {
       }
     });
   });
-}
+};
 
-async function start() {
+const start = async () => {
   const fastify = await build();
 
   // Setup graceful shutdown
@@ -151,7 +155,7 @@ async function start() {
     fastify.log.error(err);
     process.exit(1);
   }
-}
+};
 
 if (isMain) {
   start();

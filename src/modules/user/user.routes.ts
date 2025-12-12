@@ -1,5 +1,3 @@
-import type { User } from '@prisma/client';
-import { FastifyInstance } from 'fastify';
 import {
   createUserSchema,
   deleteUserSchema,
@@ -8,6 +6,9 @@ import {
   schemasList,
   updateUserSchema,
 } from './user.schema.js';
+
+import type { User } from '@prisma/client';
+import { FastifyInstance } from 'fastify';
 
 interface CreateUserBody {
   email: string;
@@ -47,9 +48,9 @@ const userRoutes = async (fastify: FastifyInstance) => {
           });
         }
 
-        const user = (await fastify.prisma.user.create({
+        const user = await fastify.prisma.user.create({
           data: { email, name, avatar },
-        })) as User;
+        });
 
         return reply.status(201).send(user);
       } catch (error: any) {

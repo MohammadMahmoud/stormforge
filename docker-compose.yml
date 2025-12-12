@@ -27,9 +27,7 @@ services:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://stormforge:stormforge@postgres:5432/stormforge?schema=public
       - PORT=3000
-    volumes:
-      - .:/app
-      - /app/node_modules
+    # REMOVE volumes section entirely
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,0 +1,3 @@
+echo "Running build before push..."
+
+npm run build
